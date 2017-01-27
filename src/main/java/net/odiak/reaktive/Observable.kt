@@ -18,4 +18,16 @@ open class Observable<T>(private val onSubscribe: OnSubscribe<T>) {
             return Subscriptions.unsubscribed()
         }
     }
+
+    fun subscribe(onNext: (T) -> Unit): Subscription =
+            subscribe(FunctionSubscriber(onNext, ErrorNotImplemented, {}))
+
+    fun subscribe(onNext: (T) -> Unit,
+                  onError: (Throwable) -> Unit): Subscription =
+            subscribe(FunctionSubscriber(onNext, onError, {}))
+
+    fun subscribe(onNext: (T) -> Unit,
+                  onError: (Throwable) -> Unit,
+                  onCompleted: () -> Unit): Subscription =
+            subscribe(onNext, onError, onCompleted)
 }

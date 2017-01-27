@@ -6,15 +6,7 @@ fun main(args: Array<String>) {
         it.onNext("hello")
         it.onNext("world")
     }
-    o.subscribe(object : Subscriber<String>() {
-        override fun onNext(v: String) {
-            println("onNext: $v")
-        }
-
-        override fun onError(e: Throwable) {
-        }
-
-        override fun onCompleted() {
-        }
-    })
+    o.subscribe {
+        println("onNext: $it")
+    }
 }
