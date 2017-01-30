@@ -30,4 +30,10 @@ open class Observable<T>(private val onSubscribe: OnSubscribe<T>) {
                   onError: (Throwable) -> Unit,
                   onCompleted: () -> Unit): Subscription =
             subscribe(onNext, onError, onCompleted)
+
+    fun <R> map(transformer: (T) -> R): Observable<R> =
+            Observable(OnSubscribeMap(this, transformer))
+
+    fun filter(predicator: (T) -> Boolean): Observable<T> =
+            Observable(OnSubscribeFilter(this, predicator))
 }
