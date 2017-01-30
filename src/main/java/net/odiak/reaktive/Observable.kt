@@ -31,9 +31,15 @@ open class Observable<T>(private val onSubscribe: OnSubscribe<T>) {
                   onCompleted: () -> Unit): Subscription =
             subscribe(onNext, onError, onCompleted)
 
+    fun <R> lift(op: Operator<R, T>): Observable<R> =
+            Observable(OnSubscribeLift(onSubscribe, op))
+
     fun <R> map(transformer: (T) -> R): Observable<R> =
             Observable(OnSubscribeMap(this, transformer))
 
     fun filter(predicator: (T) -> Boolean): Observable<T> =
             Observable(OnSubscribeFilter(this, predicator))
+
+    fun distinctUntilChanged(): Observable<T> =
+            lift(OperatorDistinctUntilChanged())
 }
